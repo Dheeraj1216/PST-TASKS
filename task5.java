@@ -1,35 +1,58 @@
 import java.util.*;
-public class Main{
-	
-   static Iterator func(ArrayList mylist){
-      Iterator it=mylist.iterator();
-      while(it.hasNext()){
-        Object element = it.next();
-if(element instanceof String)
-			break;
-		}
-      return it;
-      
-   }
-   @SuppressWarnings({ "unchecked" })
-   public static void main(String []args){
-      ArrayList mylist = new ArrayList();
-      Scanner sc = new Scanner(System.in);
-      int n = sc.nextInt();
-      int m = sc.nextInt();
-      for(int i = 0;i<n;i++){
-         mylist.add(sc.nextInt());
-      }
-      
-      mylist.add("###");
-      for(int i=0;i<m;i++){
-         mylist.add(sc.next());
-      }
-      
-      Iterator it=func(mylist);
-      while(it.hasNext()){
-         Object element = it.next();
-         System.out.println((String)element);
-      }
-   }
+
+// Custom Exception
+class InsufficientStockException extends Exception {
+    InsufficientStockException(String message) {
+        super(message);
+    }
+}
+
+// Order class
+class Order {
+    int orderId;
+    String productName;
+    int quantity;
+    int availableStock;
+
+    Order(int orderId, String productName, int quantity, int availableStock) {
+        this.orderId = orderId;
+        this.productName = productName;
+        this.quantity = quantity;
+        this.availableStock = availableStock;
+    }
+
+    // Method to process order
+    void processOrder() throws InsufficientStockException {
+        if (quantity > availableStock) {
+            throw new InsufficientStockException("Order " + orderId + " failed: Insufficient stock");
+        } else {
+            System.out.println("Order " + orderId + " processed successfully");
+        }
+    }
+}
+
+// Main class
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+
+        for (int i = 0; i < n; i++) {
+            int id = sc.nextInt();
+            String product = sc.next();
+            int quantity = sc.nextInt();
+            int stock = sc.nextInt();
+
+            Order order = new Order(id, product, quantity, stock);
+
+            try {
+                order.processOrder();
+            } catch (InsufficientStockException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        sc.close();
+    }
 }

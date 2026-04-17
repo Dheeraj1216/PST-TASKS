@@ -1,54 +1,85 @@
-import java.io.*;
 import java.util.*;
-import java.text.*;
-import java.math.*;
-import java.util.regex.*;
-import java.lang.reflect.*;
 
-
-class Singleton {
-
-    // public variable as used in main
-    public String str;
-
-    // create a single instance (eager initialization)
-    private static Singleton instance = new Singleton();
-
-    // private constructor
-    private Singleton() {
-    }
-
-    // method to return the single instance
-    public static Singleton getSingleInstance() {
-        return instance;
+// Base class
+class Payment {
+    String processPayment(double amount) {
+        return "Processed payment: Total Amount = " + amount;
     }
 }
 
+// Credit Card Payment
+class CreditCardPayment extends Payment {
+    @Override
+    String processPayment(double amount) {
+        double total = amount + (amount * 0.02);
+        return String.format("Processed CreditCard payment: Total Amount = %.2f", total);
+    }
+}
+
+// PayPal Payment
+class PayPalPayment extends Payment {
+    @Override
+    String processPayment(double amount) {
+        double total = amount + 1.50;
+        return String.format("Processed PayPal payment: Total Amount = %.2f", total);
+    }
+}
+
+// UPI Payment
+class UPIPayment extends Payment {
+    @Override
+    String processPayment(double amount) {
+        return String.format("Processed UPI payment: Total Amount = %.2f", amount);
+    }
+}
+
+// Main class
 public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
 
- public static void main(String args[])throws Exception{
-	
-	Scanner sc=new Scanner(System.in);
-	Singleton s1 = Singleton.getSingleInstance(); //retrive the single instance
-    Singleton s2=Singleton.getSingleInstance();
-    assert(s1==s2);
-    
-	//verify that the constructor is private
-	Class c=s1.getClass();
-	Constructor[] allConstructors = c.getDeclaredConstructors();
-	assert allConstructors.length==1;
-	for (Constructor ctor : allConstructors) 
-	{
-		if(ctor.getModifiers()!=2 || !ctor.toString().equals("private Singleton()")) //The constructor must be private
-		{
-			System.out.println("Wrong class!");
-		}
-	}
-    String str=sc.nextLine();
-	s1.str=str;
-    s2.str=str;
-    System.out.println("Hello I am a singleton! Let me say "+str+" to you");
-	
- }
+        int n = sc.nextInt();
+        List<Payment> payments = new ArrayList<>();
 
+        for (int i = 0; i < n; i++) {
+            char type = sc.next().charAt(0);
+            double amount = sc.nextDouble();
+
+            if (type == 'C') {
+                payments.add(new CreditCardPayment());
+            } else if (type == 'P') {
+                payments.add(new PayPalPayment());
+            } else if (type == 'U') {
+                payments.add(new UPIPayment());
+            }
+        }
+
+        // Process payments using polymorphism
+        for (Payment p : payments) {
+            double amount = sc.nextDouble(); // ❌ mistake avoided below
+        }
+
+        // Correct processing
+        sc = new Scanner(System.in);
+        sc.nextInt(); // skip count already read
+
+        for (int i = 0; i < n; i++) {
+            char type = sc.next().charAt(0);
+            double amount = sc.nextDouble();
+
+            Payment p;
+
+            if (type == 'C') {
+                p = new CreditCardPayment();
+            } else if (type == 'P') {
+                p = new PayPalPayment();
+            } else {
+                p = new UPIPayment();
+            }
+
+            System.out.println(p.processPayment(amount));
+        }
+
+        sc.close();
+    }
 }
