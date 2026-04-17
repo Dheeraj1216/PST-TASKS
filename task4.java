@@ -1,29 +1,29 @@
-class Solution {
-    public boolean rotateString(String A, String B) {
-        if(A == null || B == null) {
-            //throw exception on A and B both being null?
-            return false;
-        }
-        if(A.length() != B.length()) {
-            return false;
-        }
-        if(A.length() == 0) {
-            return true;
-        }
-        for(int i = 0; i < A.length(); i++) {
-            if(rotateString(A, B, i)) {
-                return true;
-            }
-        }
-        return false;
+class BrowserHistory {
+
+    List<String> history;
+    int index;
+
+    public BrowserHistory(String homepage) {
+        history = new ArrayList<>();
+        history.add(homepage);
+        index = 0;
     }
-    
-    private boolean rotateString(String A, String B, int rotation) {
-        for(int i = 0; i < A.length(); i++) {
-            if(A.charAt(i) != B.charAt((i+rotation)%B.length())) {
-                return false;
-            }
+
+    public void visit(String url) {
+        while (history.size() > index + 1) {
+            history.remove(history.size() - 1);
         }
-        return true;
+        history.add(url);
+        index++;
+    }
+
+    public String back(int steps) {
+        index = Math.max(0, index - steps);
+        return history.get(index);
+    }
+
+    public String forward(int steps) {
+        index = Math.min(history.size() - 1, index + steps);
+        return history.get(index);
     }
 }

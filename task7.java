@@ -1,78 +1,38 @@
 import java.io.*;
-import java.math.*;
-import java.security.*;
-import java.text.*;
 import java.util.*;
-import java.util.concurrent.*;
-import java.util.function.*;
+import java.text.*;
+import java.math.*;
 import java.util.regex.*;
-import java.util.stream.*;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
 
-class Result {
-
-    /*
-     * Complete the 'palindromeIndex' function below.
-     *
-     * The function is expected to return an INTEGER.
-     * The function accepts STRING s as parameter.
-     */
-public static int palindromeIndex(String s) {
-    int left = 0;
-    int right = s.length() - 1;
-
-    while (left < right) {
-        if (s.charAt(left) != s.charAt(right)) {
-            if (isPalindrome(s, left + 1, right)) {
-                return left;
-            } else {
-                return right;
-            }
-        }
-        left++;
-        right--;
-    }
-
-    return -1;
+class Animal{
+	void walk()
+	{
+		System.out.println("I am walking");
+	}
 }
 
-// Helper function
-private static boolean isPalindrome(String s, int l, int r) {
-    while (l < r) {
-        if (s.charAt(l) != s.charAt(r)) {
-            return false;
-        }
-        l++;
-        r--;
+class Bird extends Animal {
+    void fly() {
+        System.out.println("I am flying");
     }
-    return true;
+
+    void sing() {
+        System.out.println("I am singing");
+    }
 }
 
 
-}
 
-public class Solution {
-    public static void main(String[] args) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
 
-        int q = Integer.parseInt(bufferedReader.readLine().trim());
 
-        IntStream.range(0, q).forEach(qItr -> {
-            try {
-                String s = bufferedReader.readLine();
+public class Solution{
 
-                int result = Result.palindromeIndex(s);
+   public static void main(String args[]){
 
-                bufferedWriter.write(String.valueOf(result));
-                bufferedWriter.newLine();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
-        bufferedReader.close();
-        bufferedWriter.close();
-    }
+	  Bird bird = new Bird();
+	  bird.walk();
+	  bird.fly();
+      bird.sing();
+	
+   }
 }

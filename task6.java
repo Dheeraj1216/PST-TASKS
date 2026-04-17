@@ -1,32 +1,71 @@
-class Solution {
-    public List<Integer> findAnagrams(String s, String p) {
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
+import java.util.regex.*;
+import java.util.stream.*;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
-        List<Integer> res = new ArrayList<>();
-        if (s.length() < p.length())
-            return res;
+class Result {
 
-        int[] sCount = new int[26];
-        int[] pCount = new int[26];
+    /*
+     * Complete the 'gradingStudents' function below.
+     *
+     * The function is expected to return an INTEGER_ARRAY.
+     * The function accepts INTEGER_ARRAY grades as parameter.
+     */
 
-        for (int i = 0; i < p.length(); i++) {
-            sCount[s.charAt(i) - 'a']++;
-            pCount[p.charAt(i) - 'a']++;
+public static List<Integer> gradingStudents(List<Integer> grades) {
+    List<Integer> result = new ArrayList<>();
+
+    for (int grade : grades) {
+        if (grade >= 38) {
+            int nextMultiple = ((grade / 5) + 1) * 5;
+            if (nextMultiple - grade < 3) {
+                grade = nextMultiple;
+            }
         }
+        result.add(grade);
+    }
 
-        if (Arrays.equals(pCount, sCount))
-            res.add(0);
+    return result;
+}
 
-        for (int i = p.length(); i < s.length(); i++) {
 
-            sCount[s.charAt(i) - 'a']++;
+}
 
-            // remove character freqeuency which is at i-p.length index bczz its not needed anymore in current window
-            sCount[s.charAt(i - p.length()) - 'a']--;
+public class Solution {
+    public static void main(String[] args) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
 
-            if (Arrays.equals(pCount, sCount))
-                res.add(i - p.length() + 1);
+        int gradesCount = Integer.parseInt(bufferedReader.readLine().trim());
 
-        }
-        return res;
+        List<Integer> grades = IntStream.range(0, gradesCount).mapToObj(i -> {
+            try {
+                return bufferedReader.readLine().replaceAll("\\s+$", "");
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        })
+            .map(String::trim)
+            .map(Integer::parseInt)
+            .collect(toList());
+
+        List<Integer> result = Result.gradingStudents(grades);
+
+        bufferedWriter.write(
+            result.stream()
+                .map(Object::toString)
+                .collect(joining("\n"))
+            + "\n"
+        );
+
+        bufferedReader.close();
+        bufferedWriter.close();
     }
 }
