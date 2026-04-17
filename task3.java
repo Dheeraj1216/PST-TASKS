@@ -1,85 +1,29 @@
-import java.util.*;
-
-// Base class
-class Payment {
-    String processPayment(double amount) {
-        return "Processed payment: Total Amount = " + amount;
-    }
-}
-
-// Credit Card Payment
-class CreditCardPayment extends Payment {
-    @Override
-    String processPayment(double amount) {
-        double total = amount + (amount * 0.02);
-        return String.format("Processed CreditCard payment: Total Amount = %.2f", total);
-    }
-}
-
-// PayPal Payment
-class PayPalPayment extends Payment {
-    @Override
-    String processPayment(double amount) {
-        double total = amount + 1.50;
-        return String.format("Processed PayPal payment: Total Amount = %.2f", total);
-    }
-}
-
-// UPI Payment
-class UPIPayment extends Payment {
-    @Override
-    String processPayment(double amount) {
-        return String.format("Processed UPI payment: Total Amount = %.2f", amount);
-    }
-}
-
-// Main class
-public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-
-        int n = sc.nextInt();
-        List<Payment> payments = new ArrayList<>();
-
-        for (int i = 0; i < n; i++) {
-            char type = sc.next().charAt(0);
-            double amount = sc.nextDouble();
-
-            if (type == 'C') {
-                payments.add(new CreditCardPayment());
-            } else if (type == 'P') {
-                payments.add(new PayPalPayment());
-            } else if (type == 'U') {
-                payments.add(new UPIPayment());
+class Solution {
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        List<Integer> arr = new ArrayList<>();
+        int n = nums.length;
+        int flag = 0;
+        Arrays.sort(nums);
+        for (int i = 1; i <= n; i++) {
+            int low = 0;
+            int high = n - 1;
+            while (low <= high) {
+                int mid = low + (high - low) / 2;
+                if (nums[mid] == i) {
+                    flag = 1;
+                    break;
+                }
+                if (nums[mid] < i) {
+                    low = mid + 1;
+                } else {
+                    high = mid - 1;
+                }
             }
-        }
-
-        // Process payments using polymorphism
-        for (Payment p : payments) {
-            double amount = sc.nextDouble(); // ❌ mistake avoided below
-        }
-
-        // Correct processing
-        sc = new Scanner(System.in);
-        sc.nextInt(); // skip count already read
-
-        for (int i = 0; i < n; i++) {
-            char type = sc.next().charAt(0);
-            double amount = sc.nextDouble();
-
-            Payment p;
-
-            if (type == 'C') {
-                p = new CreditCardPayment();
-            } else if (type == 'P') {
-                p = new PayPalPayment();
-            } else {
-                p = new UPIPayment();
+            if (flag == 0) {
+                arr.add(i);
             }
-
-            System.out.println(p.processPayment(amount));
+            flag = 0;
         }
-
-        sc.close();
+        return arr;
     }
 }

@@ -1,58 +1,103 @@
-import java.util.*;
+class MyLinkedList {
 
-// Custom Exception
-class InsufficientStockException extends Exception {
-    InsufficientStockException(String message) {
-        super(message);
-    }
-}
+    class ListNode {
+        int val;
+        ListNode next;
 
-// Order class
-class Order {
-    int orderId;
-    String productName;
-    int quantity;
-    int availableStock;
-
-    Order(int orderId, String productName, int quantity, int availableStock) {
-        this.orderId = orderId;
-        this.productName = productName;
-        this.quantity = quantity;
-        this.availableStock = availableStock;
-    }
-
-    // Method to process order
-    void processOrder() throws InsufficientStockException {
-        if (quantity > availableStock) {
-            throw new InsufficientStockException("Order " + orderId + " failed: Insufficient stock");
-        } else {
-            System.out.println("Order " + orderId + " processed successfully");
+        ListNode(int val) {
+            this.val = val;
         }
     }
-}
 
-// Main class
-public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+    ListNode head;
+    int size;
 
-        int n = sc.nextInt();
-
-        for (int i = 0; i < n; i++) {
-            int id = sc.nextInt();
-            String product = sc.next();
-            int quantity = sc.nextInt();
-            int stock = sc.nextInt();
-
-            Order order = new Order(id, product, quantity, stock);
-
-            try {
-                order.processOrder();
-            } catch (InsufficientStockException e) {
-                System.out.println(e.getMessage());
-            }
+    public MyLinkedList() {
+        head = null;
+        size = 0;
+    }
+    
+    public int get(int index) {
+        if (index < 0 || index >= size) {
+            return -1;
         }
 
-        sc.close();
+        ListNode current = head;
+        for (int i = 0; i < index; i++) {
+            current = current.next;
+        }
+
+        return current.val;
+    }
+    
+    public void addAtHead(int val) {
+        ListNode newNode = new ListNode(val);
+        newNode.next = head;
+        head = newNode;
+        size++;
+    }
+    
+    public void addAtTail(int val) {
+        ListNode newNode = new ListNode(val);
+
+        if (head == null) {
+            head = newNode;
+            size++;
+            return;
+        }
+
+        ListNode current = head;
+        while (current.next != null) {
+            current = current.next;
+        }
+
+        current.next = newNode;
+        size++;
+    }
+    
+    public void addAtIndex(int index, int val) {
+        if (index < 0 || index > size) {
+            return;
+        }
+
+        if (index == 0) {
+            addAtHead(val);
+            return;
+        }
+
+        if (index == size) {
+            addAtTail(val);
+            return;
+        }
+
+        ListNode current = head;
+        for (int i = 0; i < index - 1; i++) {
+            current = current.next;
+        }
+
+        ListNode newNode = new ListNode(val);
+        newNode.next = current.next;
+        current.next = newNode;
+        size++;
+    }
+    
+    public void deleteAtIndex(int index) {
+        if (index < 0 || index >= size) {
+            return;
+        }
+
+        if (index == 0) {
+            head = head.next;
+            size--;
+            return;
+        }
+
+        ListNode current = head;
+        for (int i = 0; i < index - 1; i++) {
+            current = current.next;
+        }
+
+        current.next = current.next.next;
+        size--;
     }
 }

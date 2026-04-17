@@ -1,28 +1,41 @@
-import java.io.*;
-import java.util.*;
-import java.text.*;
-import java.math.*;
-import java.util.regex.*;
+class MinStack {
 
-class Arithmetic {
-    int add(int a, int b) {
-        return a + b;
+private Stack<Integer> stack;
+    private Stack<Integer> minStack;
+
+    public MinStack() {
+        stack = new Stack<>();
+        minStack = new Stack<>();
+    }
+
+    public void push(int val) {
+        stack.push(val);
+        if (minStack.isEmpty() || val <= minStack.peek()) {
+            minStack.push(val);
+        } else {
+            minStack.push(minStack.peek()); // keep current min
+        }
+    }
+
+    public void pop() {
+        stack.pop();
+        minStack.pop();
+    }
+
+    public int top() {
+        return stack.peek();
+    }
+
+    public int getMin() {
+        return minStack.peek();   
     }
 }
 
-class Adder extends Arithmetic {
-}
-
-
-public class Solution{
-    public static void main(String []args){
-        // Create a new Adder object
-        Adder a = new Adder();
-        
-        // Print the name of the superclass on a new line
-        System.out.println("My superclass is: " + a.getClass().getSuperclass().getName());	
-        
-        // Print the result of 3 calls to Adder's `add(int,int)` method as 3 space-separated integers:
-        System.out.print(a.add(10,32) + " " + a.add(10,3) + " " + a.add(10,10) + "\n");
-     }
-}
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack obj = new MinStack();
+ * obj.push(val);
+ * obj.pop();
+ * int param_3 = obj.top();
+ * int param_4 = obj.getMin();
+ */

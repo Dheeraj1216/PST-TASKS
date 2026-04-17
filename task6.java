@@ -1,115 +1,45 @@
-import java.util.*;
+class MyQueue {
 
-// Account class
-class Account {
-    int accountNumber;
-    String name;
-    double balance;
+private Stack<Integer> inStack;
+    private Stack<Integer> outStack;
 
-    Account(int accountNumber, String name, double balance) {
-        this.accountNumber = accountNumber;
-        this.name = name;
-        this.balance = balance;
-    }
-}
-
-// Bank class
-class Bank {
-    Map<Integer, Account> accounts = new HashMap<>();
-
-    // Add account
-    void addAccount(Account acc) {
-        accounts.put(acc.accountNumber, acc);
+    public MyQueue() {
+        inStack = new Stack<>();
+        outStack = new Stack<>();
     }
 
-    // Deposit
-    void deposit(int accNo, double amount) {
-        Account acc = accounts.get(accNo);
-        if (acc == null) {
-            System.out.println("Account not found");
-            return;
-        }
-        acc.balance += amount;
-        System.out.println("Deposited " + (int)amount + " to " + acc.name);
+    public void push(int x) {
+        inStack.push(x);
     }
 
-    // Withdraw
-    void withdraw(int accNo, double amount) {
-        Account acc = accounts.get(accNo);
-        if (acc == null) {
-            System.out.println("Account not found");
-            return;
-        }
-        if (acc.balance < amount) {
-            System.out.println("Insufficient balance");
-            return;
-        }
-        acc.balance -= amount;
-        System.out.println("Withdrawn " + (int)amount + " from " + acc.name);
+    public int pop() {
+        moveIfNeeded();
+        return outStack.pop();
     }
 
-    // Transfer
-    void transfer(int fromAcc, int toAcc, double amount) {
-        Account sender = accounts.get(fromAcc);
-        Account receiver = accounts.get(toAcc);
-
-        if (sender == null || receiver == null) {
-            System.out.println("Account not found");
-            return;
-        }
-
-        if (sender.balance < amount) {
-            System.out.println("Insufficient balance");
-            return;
-        }
-
-        sender.balance -= amount;
-        receiver.balance += amount;
-
-        System.out.println("Transferred " + (int)amount + " from " + sender.name + " to " + receiver.name);
+    public int peek() {
+        moveIfNeeded();
+        return outStack.peek();
     }
-}
 
-// Main class
-public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+    public boolean empty() {
+        return inStack.isEmpty() && outStack.isEmpty();
+    }
 
-        Bank bank = new Bank();
-
-        // Read accounts
-        int n = sc.nextInt();
-        for (int i = 0; i < n; i++) {
-            int accNo = sc.nextInt();
-            String name = sc.next();
-            double balance = sc.nextDouble();
-
-            bank.addAccount(new Account(accNo, name, balance));
-        }
-
-        // Process operations
-        int ops = sc.nextInt();
-        for (int i = 0; i < ops; i++) {
-            String operation = sc.next();
-
-            if (operation.equals("DEPOSIT")) {
-                int accNo = sc.nextInt();
-                double amount = sc.nextDouble();
-                bank.deposit(accNo, amount);
-
-            } else if (operation.equals("WITHDRAW")) {
-                int accNo = sc.nextInt();
-                double amount = sc.nextDouble();
-                bank.withdraw(accNo, amount);
-
-            } else if (operation.equals("TRANSFER")) {
-                int fromAcc = sc.nextInt();
-                int toAcc = sc.nextInt();
-                double amount = sc.nextDouble();
-                bank.transfer(fromAcc, toAcc, amount);
+    private void moveIfNeeded() {
+        if (outStack.isEmpty()) {
+            while (!inStack.isEmpty()) {
+                outStack.push(inStack.pop());
             }
         }
-
-        sc.close();
     }
 }
+
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * MyQueue obj = new MyQueue();
+ * obj.push(x);
+ * int param_2 = obj.pop();
+ * int param_3 = obj.peek();
+ * boolean param_4 = obj.empty();
+ */
