@@ -1,52 +1,25 @@
 
-   
 
-    // Check odd
-    static PerformOperation isOdd() {
-        return n -> n % 2 != 0;
-    }
+    public static String getSmallestAndLargest(String s, int k) {
+       
+        
+        String smallest = s.substring(0, k);
+        String largest  = s.substring(0, k);
 
-    // Check prime
-    static PerformOperation isPrime() {
-        return n -> {
-            if (n <= 1) return false;
-            for (int i = 2; i <= Math.sqrt(n); i++) {
-                if (n % i == 0) return false;
+        for (int i = 1; i <= s.length() - k; i++) {
+            String sub = s.substring(i, i + k);
+
+            if (sub.compareTo(smallest) < 0) {
+                smallest = sub;
             }
-            return true;
-        };
-    }
 
-    // Check palindrome
-    static PerformOperation isPalindrome() {
-        return n -> {
-            int temp = n, rev = 0;
-            while (temp > 0) {
-                rev = rev * 10 + temp % 10;
-                temp /= 10;
+            if (sub.compareTo(largest) > 0) {
+                largest = sub;
             }
-            return rev == n;
-        };
-    }
-
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int t = sc.nextInt();
-
-        while (t-- > 0) {
-            int choice = sc.nextInt();
-            int num = sc.nextInt();
-
-            if (choice == 1)
-                System.out.println(isOdd().check(num) ? "ODD" : "EVEN");
-            else if (choice == 2)
-                System.out.println(isPrime().check(num) ? "PRIME" : "COMPOSITE");
-            else if (choice == 3)
-                System.out.println(isPalindrome().check(num) ? "PALINDROME" : "NOT PALINDROME");
         }
 
-        sc.close();
+        return smallest + "\n" + largest;
     }
-}
-
+        
+        
 
