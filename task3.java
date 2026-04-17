@@ -1,54 +1,54 @@
-class Pair{
-    String stationName;
-    int time;
-    int distance;
-    int noofroutes;
-    Pair(String stationName,int time){
-        this.stationName=stationName;
-        this.time=time;
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+import java.lang.reflect.*;
+
+
+class Singleton {
+
+    // public variable as used in main
+    public String str;
+
+    // create a single instance (eager initialization)
+    private static Singleton instance = new Singleton();
+
+    // private constructor
+    private Singleton() {
     }
-    Pair(int distance,int noofroutes){
-        this.distance=distance;
-        this.noofroutes=noofroutes;
+
+    // method to return the single instance
+    public static Singleton getSingleInstance() {
+        return instance;
     }
-    
 }
-class UndergroundSystem {
-    HashMap<String,Pair> travel;
-    HashMap<Integer,Pair> checkin;
-    public UndergroundSystem() {
-        travel=new HashMap<>();
-        checkin=new HashMap<>();
-    }
+
+public class Main {
+
+ public static void main(String args[])throws Exception{
+	
+	Scanner sc=new Scanner(System.in);
+	Singleton s1 = Singleton.getSingleInstance(); //retrive the single instance
+    Singleton s2=Singleton.getSingleInstance();
+    assert(s1==s2);
     
-    public void checkIn(int id, String stationName, int t) {
-        checkin.put(id,new Pair(stationName,t));
-    }
-    
-    public void checkOut(int id, String stationName, int t) {
-        String startStationName=checkin.get(id).stationName;
-        int arrivaltime=checkin.get(id).time;
-        int totaltimetravelled=t-arrivaltime;
-        String route=startStationName+"-"+stationName;
-        if(!travel.containsKey(route)){
-            travel.put(route,new Pair(totaltimetravelled,1));
-        }
-        else{
-            int dist=travel.get(route).distance;
-            int noofroutes=travel.get(route).noofroutes;
-            travel.put(route,new Pair(dist+totaltimetravelled,noofroutes+1));
-        }
-    }
-    
-    public double getAverageTime(String startStation, String endStation) {
-        String route=startStation+"-"+endStation;
-        double avg=0.0;
-        if(!travel.containsKey(route)){
-            return avg;
-        }
-        else{
-            avg=travel.get(route).distance/(double)travel.get(route).noofroutes;
-        }
-        return avg;
-    }
+	//verify that the constructor is private
+	Class c=s1.getClass();
+	Constructor[] allConstructors = c.getDeclaredConstructors();
+	assert allConstructors.length==1;
+	for (Constructor ctor : allConstructors) 
+	{
+		if(ctor.getModifiers()!=2 || !ctor.toString().equals("private Singleton()")) //The constructor must be private
+		{
+			System.out.println("Wrong class!");
+		}
+	}
+    String str=sc.nextLine();
+	s1.str=str;
+    s2.str=str;
+    System.out.println("Hello I am a singleton! Let me say "+str+" to you");
+	
+ }
+
 }

@@ -1,31 +1,35 @@
-class MyHashSet {
-    int index=0;
-    int[] MyHash=new int[1000001];
-    public MyHashSet() {
-    }
-    
-    public void add(int key) {
-        if(!contains(key))
-        MyHash[index++]=key;
-
-    }
-    
-    public void remove(int key) {
-        int ind=index(key);
-        if(ind==-1)return;
-        for(int i=ind;i<index;i++)MyHash[i]=MyHash[i+1];
-        index--;
-    }
-    public int index(int key) {
-        for(int i=0;i<index;i++){
-            if(MyHash[i]==key)return i;
-        }
-        return -1;
-    }
-    public boolean contains(int key) {
-        for(int i=0;i<index;i++){
-            if(MyHash[i]==key)return true;
-        }
-        return false;
-    }
+import java.util.*;
+public class Main{
+	
+   static Iterator func(ArrayList mylist){
+      Iterator it=mylist.iterator();
+      while(it.hasNext()){
+        Object element = it.next();
+if(element instanceof String)
+			break;
+		}
+      return it;
+      
+   }
+   @SuppressWarnings({ "unchecked" })
+   public static void main(String []args){
+      ArrayList mylist = new ArrayList();
+      Scanner sc = new Scanner(System.in);
+      int n = sc.nextInt();
+      int m = sc.nextInt();
+      for(int i = 0;i<n;i++){
+         mylist.add(sc.nextInt());
+      }
+      
+      mylist.add("###");
+      for(int i=0;i<m;i++){
+         mylist.add(sc.next());
+      }
+      
+      Iterator it=func(mylist);
+      while(it.hasNext()){
+         Object element = it.next();
+         System.out.println((String)element);
+      }
+   }
 }

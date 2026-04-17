@@ -1,27 +1,38 @@
-class ParkingSystem {
-    private int big,small,medium;
-    public ParkingSystem(int big, int medium, int small) {
-        
-       this.big = big;
-       this.medium = medium;
-       this.small= small; 
+import java.util.*;
+class Sports{
+
+    String getName(){
+        return "Generic Sports";
     }
-    
-    public boolean addCar(int carType) {
-        if(carType == 1 && big>0){
-            big-=1;
-            return true;
-        }
-        else if(carType==2 && medium>0){
-            medium-=1;
-            return true;
-        }
-        else if(carType==3 && small>0){
-            small-=1;
-            return true; 
-        }
-        return false;
-        
-        
+  
+    void getNumberOfTeamMembers(){
+        System.out.println( "Each team has n players in " + getName() );
     }
+}
+
+class Soccer extends Sports{
+    @Override
+    String getName(){
+        return "Soccer Class";
+    }
+
+
+    @Override
+    void getNumberOfTeamMembers() {
+        System.out.println("Each team has 11 players in " + getName());
+    }
+
+
+}
+
+public class Solution{
+	
+    public static void main(String []args){
+        Sports c1 = new Sports();
+        Soccer c2 = new Soccer();
+        System.out.println(c1.getName());
+        c1.getNumberOfTeamMembers();
+        System.out.println(c2.getName());
+        c2.getNumberOfTeamMembers();
+	}
 }

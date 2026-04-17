@@ -1,71 +1,40 @@
-import java.io.*;
-import java.math.*;
-import java.security.*;
-import java.text.*;
 import java.util.*;
-import java.util.concurrent.*;
-import java.util.function.*;
-import java.util.regex.*;
-import java.util.stream.*;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
+interface AdvancedArithmetic{
+  int divisor_sum(int n);
+}
 
-class Result {
+class MyCalculator implements AdvancedArithmetic {
 
-    /*
-     * Complete the 'gradingStudents' function below.
-     *
-     * The function is expected to return an INTEGER_ARRAY.
-     * The function accepts INTEGER_ARRAY grades as parameter.
-     */
-
-public static List<Integer> gradingStudents(List<Integer> grades) {
-    List<Integer> result = new ArrayList<>();
-
-    for (int grade : grades) {
-        if (grade >= 38) {
-            int nextMultiple = ((grade / 5) + 1) * 5;
-            if (nextMultiple - grade < 3) {
-                grade = nextMultiple;
+    public int divisor_sum(int n) {
+        int sum = 0;
+        for (int i = 1; i <= n; i++) {
+            if (n % i == 0) {
+                sum += i;
             }
         }
-        result.add(grade);
-    }
-
-    return result;
-}
-
-
-}
-
-public class Solution {
-    public static void main(String[] args) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
-
-        int gradesCount = Integer.parseInt(bufferedReader.readLine().trim());
-
-        List<Integer> grades = IntStream.range(0, gradesCount).mapToObj(i -> {
-            try {
-                return bufferedReader.readLine().replaceAll("\\s+$", "");
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        })
-            .map(String::trim)
-            .map(Integer::parseInt)
-            .collect(toList());
-
-        List<Integer> result = Result.gradingStudents(grades);
-
-        bufferedWriter.write(
-            result.stream()
-                .map(Object::toString)
-                .collect(joining("\n"))
-            + "\n"
-        );
-
-        bufferedReader.close();
-        bufferedWriter.close();
+        return sum;
     }
 }
+
+class Solution{
+    public static void main(String []args){
+        MyCalculator my_calculator = new MyCalculator();
+        System.out.print("I implemented: ");
+        ImplementedInterfaceNames(my_calculator);
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        System.out.print(my_calculator.divisor_sum(n) + "\n");
+      	sc.close();
+    }
+    /*
+     *  ImplementedInterfaceNames method takes an object and prints the name of the interfaces it implemented
+     */
+    static void ImplementedInterfaceNames(Object o){
+        Class[] theInterfaces = o.getClass().getInterfaces();
+        for (int i = 0; i < theInterfaces.length; i++){
+            String interfaceName = theInterfaces[i].getName();
+            System.out.println(interfaceName);
+        }
+    }
+}
+
