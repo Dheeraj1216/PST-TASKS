@@ -13,27 +13,42 @@ import static java.util.stream.Collectors.toList;
 class Result {
 
     /*
-     * Complete the 'diagonalDifference' function below.
+     * Complete the 'palindromeIndex' function below.
      *
      * The function is expected to return an INTEGER.
-     * The function accepts 2D_INTEGER_ARRAY arr as parameter.
+     * The function accepts STRING s as parameter.
      */
+public static int palindromeIndex(String s) {
+    int left = 0;
+    int right = s.length() - 1;
 
-    public static int diagonalDifference(List<List<Integer>> arr) {
-        int n = arr.size();
-        int primary = 0;
-        int secondary = 0;
-
-        for (int i = 0; i < n; i++) {
-            primary += arr.get(i).get(i);
-            secondary += arr.get(i).get(n - 1 - i);
+    while (left < right) {
+        if (s.charAt(left) != s.charAt(right)) {
+            if (isPalindrome(s, left + 1, right)) {
+                return left;
+            } else {
+                return right;
+            }
         }
-
-        return Math.abs(primary - secondary);
-    // Write your code here
-    
-
+        left++;
+        right--;
     }
+
+    return -1;
+}
+
+// Helper function
+private static boolean isPalindrome(String s, int l, int r) {
+    while (l < r) {
+        if (s.charAt(l) != s.charAt(r)) {
+            return false;
+        }
+        l++;
+        r--;
+    }
+    return true;
+}
+
 
 }
 
@@ -42,26 +57,20 @@ public class Solution {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
 
-        int n = Integer.parseInt(bufferedReader.readLine().trim());
+        int q = Integer.parseInt(bufferedReader.readLine().trim());
 
-        List<List<Integer>> arr = new ArrayList<>();
-
-        IntStream.range(0, n).forEach(i -> {
+        IntStream.range(0, q).forEach(qItr -> {
             try {
-                arr.add(
-                    Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
-                        .map(Integer::parseInt)
-                        .collect(toList())
-                );
+                String s = bufferedReader.readLine();
+
+                int result = Result.palindromeIndex(s);
+
+                bufferedWriter.write(String.valueOf(result));
+                bufferedWriter.newLine();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
         });
-
-        int result = Result.diagonalDifference(arr);
-
-        bufferedWriter.write(String.valueOf(result));
-        bufferedWriter.newLine();
 
         bufferedReader.close();
         bufferedWriter.close();

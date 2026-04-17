@@ -13,108 +13,99 @@ import static java.util.stream.Collectors.toList;
 class Result {
 
     /*
-     * Complete the 'matrixRotation' function below.
+     * Complete the 'circularPalindromes' function below.
      *
-     * The function accepts following parameters:
-     *  1. 2D_INTEGER_ARRAY matrix
-     *  2. INTEGER r
+     * The function is expected to return an INTEGER_ARRAY.
+     * The function accepts STRING s as parameter.
      */
 
-    public static void matrixRotation(List<List<Integer>> matrix, int r) {
-     int m = matrix.size();
-        int n = matrix.get(0).size();
+public static List<Integer> circularPalindromes(String s) {
+    int n = s.length();
+    String t = s + s;
 
-        int layers = Math.min(m, n) / 2;
+    int[] d1 = manacherOdd(t);
+    int[] d2 = manacherEven(t);
 
-        for (int layer = 0; layer < layers; layer++) {
+    List<Integer> res = new ArrayList<>();
 
-            List<Integer> elements = new ArrayList<>();
+    for (int i = 0; i < n; i++) {
+        int maxLen = 1;
 
-            int top = layer;
-            int left = layer;
-            int bottom = m - 1 - layer;
-            int right = n - 1 - layer;
+        for (int j = i; j < i + n; j++) {
+            int len1 = Math.min(d1[j], Math.min(j - i + 1, i + n - j));
+            maxLen = Math.max(maxLen, 2 * len1 - 1);
 
-            // Top row
-            for (int i = left; i <= right; i++)
-                elements.add(matrix.get(top).get(i));
-
-            // Right column
-            for (int i = top + 1; i <= bottom - 1; i++)
-                elements.add(matrix.get(i).get(right));
-
-            // Bottom row
-            for (int i = right; i >= left; i--)
-                elements.add(matrix.get(bottom).get(i));
-
-            // Left column
-            for (int i = bottom - 1; i >= top + 1; i--)
-                elements.add(matrix.get(i).get(left));
-
-            int size = elements.size();
-            int rotations = r % size;
-
-            Collections.rotate(elements, -rotations);
-
-            int index = 0;
-
-            // Put back Top row
-            for (int i = left; i <= right; i++)
-                matrix.get(top).set(i, elements.get(index++));
-
-            // Right column
-            for (int i = top + 1; i <= bottom - 1; i++)
-                matrix.get(i).set(right, elements.get(index++));
-
-            // Bottom row
-            for (int i = right; i >= left; i--)
-                matrix.get(bottom).set(i, elements.get(index++));
-
-            // Left column
-            for (int i = bottom - 1; i >= top + 1; i--)
-                matrix.get(i).set(left, elements.get(index++));
+            int len2 = Math.min(d2[j], Math.min(j - i, i + n - j));
+            maxLen = Math.max(maxLen, 2 * len2);
         }
 
-        // Print result
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                System.out.print(matrix.get(i).get(j) + " ");
-            }
-            System.out.println();
-        }
-
+        res.add(maxLen);
     }
+
+    return res;
+}
+
+// Odd length palindromes
+private static int[] manacherOdd(String s) {
+    int n = s.length();
+    int[] d1 = new int[n];
+    int l = 0, r = -1;
+
+    for (int i = 0; i < n; i++) {
+        int k = (i > r) ? 1 : Math.min(d1[l + r - i], r - i + 1);
+        while (i - k >= 0 && i + k < n && s.charAt(i - k) == s.charAt(i + k)) {
+            k++;
+        }
+        d1[i] = k--;
+        if (i + k > r) {
+            l = i - k;
+            r = i + k;
+        }
+    }
+    return d1;
+}
+
+// Even length palindromes
+private static int[] manacherEven(String s) {
+    int n = s.length();
+    int[] d2 = new int[n];
+    int l = 0, r = -1;
+
+    for (int i = 0; i < n; i++) {
+        int k = (i > r) ? 0 : Math.min(d2[l + r - i + 1], r - i + 1);
+        while (i - k - 1 >= 0 && i + k < n && s.charAt(i - k - 1) == s.charAt(i + k)) {
+            k++;
+        }
+        d2[i] = k--;
+        if (i + k > r) {
+            l = i - k - 1;
+            r = i + k;
+        }
+    }
+    return d2;
+}
 
 }
 
 public class Solution {
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
 
-        String[] firstMultipleInput = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
+        int n = Integer.parseInt(bufferedReader.readLine().trim());
 
-        int m = Integer.parseInt(firstMultipleInput[0]);
+        String s = bufferedReader.readLine();
 
-        int n = Integer.parseInt(firstMultipleInput[1]);
+        List<Integer> result = Result.circularPalindromes(s);
 
-        int r = Integer.parseInt(firstMultipleInput[2]);
-
-        List<List<Integer>> matrix = new ArrayList<>();
-
-        IntStream.range(0, m).forEach(i -> {
-            try {
-                matrix.add(
-                    Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
-                        .map(Integer::parseInt)
-                        .collect(toList())
-                );
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-
-        Result.matrixRotation(matrix, r);
+        bufferedWriter.write(
+            result.stream()
+                .map(Object::toString)
+                .collect(joining("\n"))
+            + "\n"
+        );
 
         bufferedReader.close();
+        bufferedWriter.close();
     }
 }

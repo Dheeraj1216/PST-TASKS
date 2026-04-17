@@ -1,16 +1,32 @@
 class Solution {
-    public void moveZeroes(int[] nums) {
-         int index = 0;
+    public List<Integer> findAnagrams(String s, String p) {
 
-        for (int i = 0; i < nums.length; i++) {
-            if (nums[i] != 0) {
-                nums[index++] = nums[i];
-            }
+        List<Integer> res = new ArrayList<>();
+        if (s.length() < p.length())
+            return res;
+
+        int[] sCount = new int[26];
+        int[] pCount = new int[26];
+
+        for (int i = 0; i < p.length(); i++) {
+            sCount[s.charAt(i) - 'a']++;
+            pCount[p.charAt(i) - 'a']++;
         }
 
-        while (index < nums.length) {
-            nums[index++] = 0;
+        if (Arrays.equals(pCount, sCount))
+            res.add(0);
+
+        for (int i = p.length(); i < s.length(); i++) {
+
+            sCount[s.charAt(i) - 'a']++;
+
+            // remove character freqeuency which is at i-p.length index bczz its not needed anymore in current window
+            sCount[s.charAt(i - p.length()) - 'a']--;
+
+            if (Arrays.equals(pCount, sCount))
+                res.add(i - p.length() + 1);
+
         }
-        
+        return res;
     }
 }

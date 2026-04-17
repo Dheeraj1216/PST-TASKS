@@ -1,14 +1,15 @@
 class Solution {
-    public int[][] transpose(int[][] mat) {
-        int n = mat.length;
-        int m = mat[0].length;
-        int arr[][] = new int[m][n];
-        for(int i=0;i<n;i++){
-            for(int j=0;j<m;j++){
-                arr[j][i]=mat[i][j];
+    public int strStr(String haystack, String needle) {
+        int n = haystack.length();
+        int m = needle.length();
+
+        if(needle.isEmpty()) return 0;
+
+        for(int i = 0 ; i <= n-m; i++){
+            if(haystack.substring(i , i+m).equals(needle)){
+                return i;
             }
         }
-
-        return arr;
+        return -1;
     }
 }
