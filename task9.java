@@ -1,28 +1,28 @@
-class Solution {
-    public String countAndSay(int n) {
-        String result = "1";
+class Solution:
+    def matrixBlockSum(self, mat: List[List[int]], k: int) -> List[List[int]]:
+         n, m = len(mat), len(mat[0])
+         dp = [[mat[i][j] for j in range(m)] for i in range(n)]
 
-        for (int i = 2; i <= n; i++) {
-            StringBuilder temp = new StringBuilder();
-            int count = 1;
+      
 
-            for (int j = 1; j < result.length(); j++) {
-                if (result.charAt(j) == result.charAt(j - 1)) {
-                    count++;
-                } else {
-                    temp.append(count);
-                    temp.append(result.charAt(j - 1));
-                    count = 1;
-                }
-            }
 
-            // Append last group
-            temp.append(count);
-            temp.append(result.charAt(result.length() - 1));
+         for i in range(n):
+            for j in range(m):
+                dp[i][j] += (dp[i][j-1] if j > 0 else 0)
+        
+         for j in range(m):
+            for i in range(n):
+                dp[i][j] += (dp[i-1][j] if i > 0 else 0)
+                        
+   
+         for i in range(n):
+            for j in range(m):
+                x1, x2 = max(0, j-k), min(j+k, m-1)
+                y1, y2 = max(0, i-k), min(i+k, n-1)
+                dy = dp[y1-1][x2] if y1 > 0 else 0
+                dx = dp[y2][x1-1] if x1 > 0 else 0
+                dz = dp[y1-1][x1-1] if (x1 > 0 and y1 > 0) else 0
+                mat[i][j] = dp[y2][x2] - dy - dx + dz
 
-            result = temp.toString();
-        }
-
-        return result;
-    }
-}
+         return mat
+        

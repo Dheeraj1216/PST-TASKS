@@ -1,25 +1,54 @@
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class Codechef
+{
+	public static void main (String[] args) throws java.lang.Exception
+	{
 
 
-    public static String getSmallestAndLargest(String s, int k) {
-       
-        
-        String smallest = s.substring(0, k);
-        String largest  = s.substring(0, k);
+        Scanner sc = new Scanner(System.in);
 
-        for (int i = 1; i <= s.length() - k; i++) {
-            String sub = s.substring(i, i + k);
+        int T = sc.nextInt();
+        sc.nextLine(); 
 
-            if (sub.compareTo(smallest) < 0) {
-                smallest = sub;
+        while (T-- > 0) {
+
+            String s = sc.nextLine();
+            int n = s.length();
+            int mid = n / 2;
+
+            int[] left = new int[26];
+            int[] right = new int[26];
+
+            for (int i = 0; i < mid; i++) {
+                char ch = s.charAt(i);
+                left[ch - 'a']++;
             }
 
-            if (sub.compareTo(largest) > 0) {
-                largest = sub;
+            
+            int start;
+            if (n % 2 == 0) {
+                start = mid;
+            } else {
+                start = mid + 1;
+            }
+
+            for (int i = start; i < n; i++) {
+                char ch = s.charAt(i);
+                right[ch - 'a']++;
+            }
+
+            if (Arrays.equals(left, right)) {
+                System.out.println("YES");
+            } else {
+                System.out.println("NO");
             }
         }
 
-        return smallest + "\n" + largest;
+        sc.close();
     }
-        
-        
+}
+
 

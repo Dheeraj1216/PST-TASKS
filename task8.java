@@ -1,15 +1,14 @@
-import java.util.Scanner;
+class Solution {
+    public int[][] transpose(int[][] mat) {
+        int n = mat.length;
+        int m = mat[0].length;
+        int arr[][] = new int[m][n];
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                arr[j][i]=mat[i][j];
+            }
+        }
 
-class HillWeight {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-
-        System.out.print("Enter N: ");
-        int n = sc.nextInt();
-
-        int weight = n * (n + 1) * (2 * n + 1) / 6;
-
-        System.out.println("Weight of hill pattern: " + weight);
-        sc.close();
+        return arr;
     }
 }

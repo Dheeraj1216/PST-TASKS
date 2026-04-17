@@ -1,13 +1,16 @@
 class Solution {
-    public static int nthTerm(int a, int d, int n) {
-        return a + (n - 1) * d;
-    }
+    public void moveZeroes(int[] nums) {
+         int index = 0;
 
-    public static void main(String[] args) {
-        int a = 2;   // first term
-        int d = 3;   // common difference
-        int n = 5;   // nth term
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != 0) {
+                nums[index++] = nums[i];
+            }
+        }
+
+        while (index < nums.length) {
+            nums[index++] = 0;
+        }
         
-        System.out.println(nthTerm(a, d, n));  // Output: 14
     }
 }

@@ -1,32 +1,59 @@
-class Solution {
-    public static String addStrings(String num1, String num2) {
-        
-        StringBuilder result = new StringBuilder();
-        int i = num1.length() - 1;
-        int j = num2.length() - 1;
-        int carry = 0;
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.function.*;
+import java.util.regex.*;
+import java.util.stream.*;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
-        while (i >= 0 || j >= 0 || carry != 0) {
-            
-            int digit1 = (i >= 0) ? num1.charAt(i) - '0' : 0;
-            int digit2 = (j >= 0) ? num2.charAt(j) - '0' : 0;
+class Result {
 
-            int sum = digit1 + digit2 + carry;
-            carry = sum / 10;
-            
-            result.append(sum % 10);
+    /*
+     * Complete the 'timeConversion' function below.
+     *
+     * The function is expected to return a STRING.
+     * The function accepts STRING s as parameter.
+     */
 
-            i--;
-            j--;
+    public static String timeConversion(String s) {
+        String period = s.substring(8);       // AM or PM
+        int hour = Integer.parseInt(s.substring(0, 2));
+        String rest = s.substring(2, 8);       // :mm:ss
+
+        if (period.equals("AM")) {
+            if (hour == 12) {
+                hour = 0;
+            }
+        } else { // PM
+            if (hour != 12) {
+                hour += 12;
+            }
         }
 
-        return result.reverse().toString();
+        return String.format("%02d%s", hour, rest);
+    // Write your code here
+
     }
 
-    public static void main(String[] args) {
-        String num1 = "12345";
-        String num2 = "9876";
+}
 
-        System.out.println(addStrings(num1, num2));  
+public class Solution {
+    public static void main(String[] args) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        String s = bufferedReader.readLine();
+
+        String result = Result.timeConversion(s);
+
+        bufferedWriter.write(result);
+        bufferedWriter.newLine();
+
+        bufferedReader.close();
+        bufferedWriter.close();
     }
 }
